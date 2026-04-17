@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Quickstart + local setup docs
+    url: https://bhaveshbakshi633.github.io/VideoToSMPL/docs/quickstart/
+    about: The fastest path from "I just cloned this" to a working pipeline.
+  - name: Troubleshooting guide
+    url: https://bhaveshbakshi633.github.io/VideoToSMPL/docs/troubleshooting/
+    about: Common failures with copy-paste fixes — check here before filing.

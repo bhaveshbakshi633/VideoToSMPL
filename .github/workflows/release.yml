@@ -1,0 +1,36 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract release notes from CHANGELOG
+        id: notes
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          awk -v ver="$version" '
+            /^## \['"$version"'\]/ {flag=1; next}
+            /^## \[/ {flag=0}
+            flag {print}
+          ' docs/CHANGELOG.md > /tmp/notes.md
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: VideoToSMPL v${{ steps.notes.outputs.version }}
+          body_path: /tmp/notes.md
+          draft: false
+          prerelease: ${{ contains(github.ref_name, '-') }}

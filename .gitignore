@@ -1,0 +1,66 @@
+# ───── Python ─────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# ───── Node / Next.js ─────
+node_modules/
+.next/
+out/
+.turbo/
+*.tsbuildinfo
+.env*.local
+.env
+.eslintcache
+
+# ───── Model weights + data (never commit) ─────
+*.ckpt
+*.pt
+*.pth
+*.pkl
+*.onnx
+*.npz
+# allow tiny demo/test fixtures explicitly
+!web/public/demos/*.pkl
+weights/
+checkpoints/
+inputs/checkpoints/
+
+# ───── Generated media ─────
+*.mp4
+*.webm
+*.mov
+!web/public/assets/demo-*.mp4
+!web/public/demos/*.mp4
+
+# ───── Build artifacts ─────
+notebooks/_built/
+web/dist/
+coverage/
+.nyc_output/
+
+# ───── Editor / OS ─────
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# ───── Logs / secrets ─────
+*.log
+.secrets
+*.pem
+*.key

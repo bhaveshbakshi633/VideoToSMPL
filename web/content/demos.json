@@ -1,0 +1,32 @@
+[
+  {
+    "slug": "walk",
+    "title": "Walk cycle",
+    "description": "Straight-line walk. Clean periodic motion, easiest motion to verify end-to-end.",
+    "sources": [
+      { "label": "Source video", "file": "source.mp4" },
+      { "label": "GVHMR mesh", "file": "smpl.mp4" },
+      { "label": "G1 retarget", "file": "g1.mp4" }
+    ]
+  },
+  {
+    "slug": "dance",
+    "title": "Dance choreography",
+    "description": "Fast upper-body motion — stresses velocity limits and joint-range clipping.",
+    "sources": [
+      { "label": "Source video", "file": "source.mp4" },
+      { "label": "GVHMR mesh", "file": "smpl.mp4" },
+      { "label": "G1 retarget", "file": "g1.mp4" }
+    ]
+  },
+  {
+    "slug": "tennis",
+    "title": "Tennis swing",
+    "description": "Asymmetric upper-body plus stance changes — good test for the sanitizer.",
+    "sources": [
+      { "label": "Source video", "file": "source.mp4" },
+      { "label": "GVHMR mesh", "file": "smpl.mp4" },
+      { "label": "G1 retarget", "file": "g1.mp4" }
+    ]
+  }
+]
