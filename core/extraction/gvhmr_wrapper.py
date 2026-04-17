@@ -91,20 +91,20 @@ def extract_gvhmr(
     except subprocess.TimeoutExpired as e:
         raise GVHMRError(f"GVHMR timed out after {timeout_sec}s", stderr=str(e)) from e
 
-    if proc.returncode != 0:
-        raise GVHMRError(
-            f"GVHMR exited with code {proc.returncode}. "
-            f"Check CUDA availability, model weights, and stderr.",
-            stderr=proc.stderr,
-            returncode=proc.returncode,
-        )
-
+    # demo.py's optional render_incam step often fails on numpy 2.x (chumpy
+    # pulls `np.int` etc.). The extraction itself still saves hmr4d_results.pt
+    # before that. We only fail if the .pt file is missing.
     result_pt = gvhmr_dir / "outputs" / "demo" / video.stem / "hmr4d_results.pt"
     if not result_pt.exists():
         raise GVHMRError(
-            f"Extraction finished but result missing: {result_pt}",
+            f"GVHMR exited {proc.returncode} and no result at {result_pt}. "
+            f"Check CUDA, model weights, and stderr.",
             stderr=proc.stderr,
+            returncode=proc.returncode,
         )
+    if proc.returncode != 0:
+        # Non-fatal: render overlay failed but .pt is saved
+        pass
 
     if output_dir is not None:
         out = Path(output_dir).expanduser().resolve()

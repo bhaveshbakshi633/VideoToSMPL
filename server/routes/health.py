@@ -17,14 +17,25 @@ router = APIRouter()
 def health() -> HealthResponse:
     notes: list[str] = []
     cuda = False
-    try:
-        import torch  # type: ignore[import-not-found]
 
-        cuda = bool(torch.cuda.is_available())
-        if not cuda:
-            notes.append("CUDA unavailable — GVHMR will run on CPU (slow)")
-    except ImportError:
-        notes.append("torch not installed")
+    # GVHMR runs in its own env via subprocess — probe CUDA there rather than
+    # the backend env (which doesn't need torch).
+    gvhmr_py = os.environ.get("GVHMR_PYTHON", "/home/ssi/anaconda3/envs/gvhmr/bin/python")
+    if os.path.exists(gvhmr_py):
+        import subprocess
+
+        try:
+            out = subprocess.run(
+                [gvhmr_py, "-c", "import torch; print(torch.cuda.is_available())"],
+                capture_output=True, text=True, timeout=10,
+            )
+            cuda = out.stdout.strip() == "True"
+            if not cuda:
+                notes.append("CUDA unavailable in gvhmr env — extraction will be slow")
+        except Exception as e:  # noqa: BLE001
+            notes.append(f"torch probe failed: {e}")
+    else:
+        notes.append(f"gvhmr python not found at {gvhmr_py} (set GVHMR_PYTHON)")
 
     gvhmr = Path(os.environ.get("GVHMR_PATH", "~/Projects/IL/GVHMR")).expanduser()
     gmr = Path(os.environ.get("GMR_PATH", "~/Projects/IL/GMR")).expanduser()

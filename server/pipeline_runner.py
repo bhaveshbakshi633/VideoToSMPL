@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import os
 import traceback
 
 from core._types import PipelineConfig
@@ -15,16 +16,25 @@ from server.state import JobRecord, store
 
 log = logging.getLogger(__name__)
 
+# GVHMR's env has torch+pytorch3d+timm etc.; GMR's env has mink+mujoco.
+# Defaults resolve to local anaconda envs; override via env vars.
+GVHMR_PYTHON = os.environ.get("GVHMR_PYTHON", "/home/ssi/anaconda3/envs/gvhmr/bin/python")
+GMR_PYTHON = os.environ.get("GMR_PYTHON")  # None → use current interpreter
+
 
 def run_job(record: JobRecord, *, do_sanitize: bool = True, do_render: bool = True) -> None:
     """Blocking end-to-end pipeline. Runs inside a worker thread."""
     job_id = record.job.id
     jd = record.dir
 
-    # ───── extract ─────
+    # ───── extract (runs in gvhmr env via subprocess) ─────
     try:
         store.update_stage(job_id, StageName.extract, status=StageStatus.running)
-        pt = extract_gvhmr(record.video_path, output_dir=jd)
+        pt = extract_gvhmr(
+            record.video_path,
+            output_dir=jd,
+            python_executable=GVHMR_PYTHON if os.path.exists(GVHMR_PYTHON) else None,
+        )
         store.update_stage(
             job_id, StageName.extract,
             status=StageStatus.done, progress=1.0, artifact=pt.name,
@@ -40,7 +50,10 @@ def run_job(record: JobRecord, *, do_sanitize: bool = True, do_render: bool = Tr
     try:
         store.update_stage(job_id, StageName.retarget, status=StageStatus.running)
         raw_pkl = jd / "raw.pkl"
-        retarget_to_g1(pt, raw_pkl)
+        retarget_to_g1(
+            pt, raw_pkl,
+            python_executable=GMR_PYTHON if (GMR_PYTHON and os.path.exists(GMR_PYTHON)) else None,
+        )
         store.update_stage(
             job_id, StageName.retarget,
             status=StageStatus.done, progress=1.0, artifact=raw_pkl.name,

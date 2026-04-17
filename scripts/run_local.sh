@@ -56,14 +56,22 @@ if command -v lsof >/dev/null 2>&1; then
 fi
 
 # ────────────────────────────────────────────────────────────────────────────
-# Conda env
+# Conda envs (backend runs in gmr; extraction shells out to gvhmr)
 # ────────────────────────────────────────────────────────────────────────────
 source "$(conda info --base)/etc/profile.d/conda.sh"
 conda activate gmr
 
+CONDA_BASE=$(conda info --base)
+export GMR_PYTHON="${GMR_PYTHON:-$CONDA_BASE/envs/gmr/bin/python}"
+export GVHMR_PYTHON="${GVHMR_PYTHON:-$CONDA_BASE/envs/gvhmr/bin/python}"
 export GVHMR_PATH="${GVHMR_PATH:-$PARENT/GVHMR}"
 export GMR_PATH="${GMR_PATH:-$PARENT/GMR}"
+export MUJOCO_GL="${MUJOCO_GL:-egl}"
 export PYTHONPATH="$REPO_DIR${PYTHONPATH:+:$PYTHONPATH}"
+
+# Use gmr env's python-as-module to invoke uvicorn — a user-installed
+# `uvicorn` on PATH may have a different shebang (e.g. system python) and
+# import errors will be confusing.
 
 # ────────────────────────────────────────────────────────────────────────────
 # Check web deps installed

@@ -59,7 +59,7 @@ def retarget_to_g1(
     cmd = [
         py,
         str(script),
-        "--gvhmr_pt",
+        "--gvhmr_pred_file",
         str(pt_in),
         "--robot",
         robot,
@@ -80,11 +80,15 @@ def retarget_to_g1(
         check=False,
     )
     if proc.returncode != 0:
+        tail = (proc.stderr or proc.stdout or "")[-2000:]
         raise RetargetError(
-            f"GMR retarget exited with code {proc.returncode}", stderr=proc.stderr
+            f"GMR retarget exited with code {proc.returncode}\n--- stderr tail ---\n{tail}",
+            stderr=proc.stderr,
         )
     if not out_pkl.exists():
+        tail = (proc.stderr or proc.stdout or "")[-2000:]
         raise RetargetError(
-            f"GMR finished but output PKL missing: {out_pkl}", stderr=proc.stderr
+            f"GMR finished but output PKL missing: {out_pkl}\n--- stderr tail ---\n{tail}",
+            stderr=proc.stderr,
         )
     return out_pkl
