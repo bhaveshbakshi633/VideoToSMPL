@@ -42,15 +42,16 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Build static site
+      - name: Build static site (Pages target)
         env:
+          NEXT_BUILD_TARGET: pages
           NEXT_PUBLIC_BASE_PATH: /VideoToSMPL
           NEXT_PUBLIC_SITE_URL: https://bhaveshbakshi633.github.io/VideoToSMPL
           NEXT_PUBLIC_REPO_URL: https://github.com/bhaveshbakshi633/VideoToSMPL
           # Uncomment + add as repo secrets to enable analytics:
           # NEXT_PUBLIC_PLAUSIBLE_DOMAIN: ${{ secrets.PLAUSIBLE_DOMAIN }}
           # NEXT_PUBLIC_CF_BEACON_TOKEN: ${{ secrets.CF_BEACON_TOKEN }}
-        run: npm run build
+        run: npm run build:pages
 
       - name: Prevent Jekyll processing
         run: touch out/.nojekyll

@@ -106,14 +106,26 @@ pip install -e "$PARENT/GVHMR"
 conda deactivate
 ok "gvhmr env ready"
 
-step "Installing GMR + core into 'gmr' env"
+step "Installing GMR + core + webapp backend into 'gmr' env"
 conda activate gmr
 pip install --upgrade pip >/dev/null
 pip install -e "$PARENT/GMR"
-pip install "mujoco>=3.1" "imageio[ffmpeg]" scipy smplx gradio psutil tqdm
+pip install "mujoco>=3.1" "imageio[ffmpeg]" scipy smplx tqdm
+pip install "fastapi>=0.110" "uvicorn[standard]>=0.27" "python-multipart>=0.0.9" "pydantic>=2.5"
 pip install -e "$REPO_DIR"      # installs the core package from this repo
 conda deactivate
 ok "gmr env ready"
+
+# ────────────────────────────────────────────────────────────────────────────
+# Web deps (optional — skip with --skip-web)
+# ────────────────────────────────────────────────────────────────────────────
+if command -v npm >/dev/null 2>&1; then
+  step "Installing web deps"
+  (cd "$REPO_DIR/web" && npm ci --silent 2>/dev/null || npm install --silent)
+  ok "web deps ready"
+else
+  warn "npm not found — install Node.js 20+ to use the webapp (https://nodejs.org/)"
+fi
 
 # ────────────────────────────────────────────────────────────────────────────
 # weights

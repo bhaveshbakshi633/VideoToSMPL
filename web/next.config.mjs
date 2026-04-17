@@ -1,11 +1,15 @@
 /** @type {import('next').NextConfig} */
 
-// Static export for GitHub Pages. Served from /VideoToSMPL/ subpath unless
-// NEXT_PUBLIC_BASE_PATH overrides (e.g. "" for custom domain).
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "/VideoToSMPL";
+// Two build modes:
+//   NEXT_BUILD_TARGET=pages  → static export for GitHub Pages (no backend,
+//                              /app shows the OfflineBanner).
+//   (default, local)         → dev/start with rewrites to the FastAPI backend.
+const isPagesBuild = process.env.NEXT_BUILD_TARGET === "pages";
+const backendUrl = process.env.BACKEND_URL ?? "http://127.0.0.1:8000";
+const basePath = isPagesBuild ? (process.env.NEXT_PUBLIC_BASE_PATH ?? "/VideoToSMPL") : "";
 
 const nextConfig = {
-  output: "export",
+  ...(isPagesBuild ? { output: "export" } : {}),
   basePath,
   assetPrefix: basePath || undefined,
   trailingSlash: true,
@@ -13,12 +17,18 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   productionBrowserSourceMaps: false,
-  experimental: { typedRoutes: false },
   env: {
     NEXT_PUBLIC_SITE_URL:
       process.env.NEXT_PUBLIC_SITE_URL ?? "https://bhaveshbakshi633.github.io/VideoToSMPL",
     NEXT_PUBLIC_REPO_URL:
       process.env.NEXT_PUBLIC_REPO_URL ?? "https://github.com/bhaveshbakshi633/VideoToSMPL",
+    NEXT_PUBLIC_BASE_PATH: basePath,
+  },
+  // Rewrites are only honored in dev/start mode. `output: export` ignores them,
+  // which is fine — Pages has no backend, the OfflineBanner catches it.
+  async rewrites() {
+    if (isPagesBuild) return [];
+    return [{ source: "/api/:path*", destination: `${backendUrl}/api/:path*` }];
   },
 };
 
