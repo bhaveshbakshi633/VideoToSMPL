@@ -21,7 +21,7 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Robotics",
 ]
 dependencies = [
-    "numpy>=1.24,<2.0",
+    "numpy>=1.24,<3.0",
     "scipy>=1.10",
     "torch>=2.3",
     "mujoco>=3.1",
