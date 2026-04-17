@@ -68,7 +68,7 @@ Colab first, local second once you're committed.
 ## Built on
 
 - [GVHMR](https://github.com/zju3dv/GVHMR) — temporally consistent SMPL extraction (SIGGRAPH Asia 2024)
-- [GMR](https://github.com/generalroboticslab/GMR) — IK-based retargeting with MuJoCo
+- [GMR](https://github.com/YanjieZe/GMR) — IK-based retargeting with MuJoCo
 - [MuJoCo](https://mujoco.org) — physics + rendering
 - [Next.js](https://nextjs.org), [Tailwind](https://tailwindcss.com), [Shiki](https://shiki.style) — the website
 

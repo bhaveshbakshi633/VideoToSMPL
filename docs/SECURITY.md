@@ -29,7 +29,7 @@ If you find a security issue, please do **not** file a public issue. Instead:
 - `pyproject.toml` pins major versions; specific CUDA builds are pinned in install scripts.
 - GitHub **Dependabot** (see `.github/dependabot.yml`) opens weekly PRs for outdated deps.
 - GitHub **CodeQL** (see `.github/workflows/codeql.yml`) scans every PR.
-- Notebooks clone only pinned public repos (`zju3dv/GVHMR`, `generalroboticslab/GMR`). If either is compromised upstream, pin to a known-good commit.
+- Notebooks clone only pinned public repos (`zju3dv/GVHMR`, `YanjieZe/GMR`). If either is compromised upstream, pin to a known-good commit.
 
 ## Known limitations
 

@@ -52,7 +52,7 @@ def retarget_to_g1(
     if not script.exists():
         raise FileNotFoundError(
             f"GMR script missing: {script}\n"
-            f"Clone: git clone https://github.com/generalroboticslab/GMR.git {gmr_dir}"
+            f"Clone: git clone https://github.com/YanjieZe/GMR.git {gmr_dir}"
         )
 
     py = python_executable or sys.executable

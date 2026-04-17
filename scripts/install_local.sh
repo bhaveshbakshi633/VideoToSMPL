@@ -75,7 +75,7 @@ clone_if_missing() {
   fi
 }
 clone_if_missing https://github.com/zju3dv/GVHMR.git GVHMR
-clone_if_missing https://github.com/generalroboticslab/GMR.git GMR
+clone_if_missing https://github.com/YanjieZe/GMR.git GMR
 
 # ────────────────────────────────────────────────────────────────────────────
 # conda envs
