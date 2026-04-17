@@ -16,12 +16,6 @@ export function Nav() {
         </Link>
         <div className="flex items-center gap-1">
           <Link
-            href="/app"
-            className="rounded-md px-3 py-1.5 text-sm text-fg-muted hover:bg-bg-subtle hover:text-fg"
-          >
-            App
-          </Link>
-          <Link
             href="/docs/quickstart"
             className="rounded-md px-3 py-1.5 text-sm text-fg-muted hover:bg-bg-subtle hover:text-fg"
           >

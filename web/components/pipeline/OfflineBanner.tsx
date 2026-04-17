@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ExternalLink, Terminal } from "lucide-react";
+import Link from "next/link";
+import { Terminal, ExternalLink } from "lucide-react";
 import { api, ApiError } from "@/lib/api";
 import { siteConfig } from "@/lib/site";
 
@@ -28,44 +29,31 @@ export function OfflineBanner() {
   if (offline !== true) return null;
 
   return (
-    <div className="grid gap-3 sm:grid-cols-2">
-      {/* ───── Colab path ───── */}
-      <a
-        href={COLAB_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="group flex flex-col rounded-xl border border-border bg-bg-elevated p-5 transition-colors hover:border-accent hover:bg-accent/5"
-      >
-        <div className="mb-3 flex items-center justify-between">
-          <span className="font-mono text-xs uppercase tracking-wider text-fg-subtle">
-            zero install
-          </span>
-          <ExternalLink className="h-4 w-4 text-fg-muted group-hover:text-accent" />
-        </div>
-        <p className="text-lg font-semibold">Open in Colab</p>
-        <p className="mt-1 text-sm text-fg-muted">
-          Free T4 GPU. Upload video, run all cells, download artifacts. ~2 min/video.
-        </p>
-      </a>
+    <div className="rounded-2xl border border-border bg-bg-elevated p-8 text-center">
+      <Terminal className="mx-auto mb-4 h-6 w-6 text-fg-subtle" />
+      <h2 className="text-xl font-semibold">This page is for local use</h2>
+      <p className="mx-auto mt-2 max-w-md text-sm text-fg-muted">
+        The control centre talks to a backend running on your machine. Install it, then open
+        this page from <code>localhost:3000</code>.
+      </p>
 
-      {/* ───── Local path ───── */}
-      <div className="flex flex-col rounded-xl border border-border bg-bg-subtle p-5">
-        <div className="mb-3 flex items-center justify-between">
-          <span className="font-mono text-xs uppercase tracking-wider text-fg-subtle">
-            byo-gpu local
-          </span>
-          <Terminal className="h-4 w-4 text-fg-muted" />
-        </div>
-        <p className="text-lg font-semibold">Run this webapp locally</p>
-        <pre className="mt-3 overflow-x-auto rounded-md border border-border bg-bg-elevated p-3 font-mono text-xs">
-{`git clone ${siteConfig.repoUrl}
-cd VideoToSMPL
-bash scripts/install_local.sh
-bash scripts/run_local.sh`}
-        </pre>
-        <p className="mt-auto pt-3 text-xs text-fg-subtle">
-          Opens at <code>localhost:3000/app</code>
-        </p>
+      <Link
+        href="/docs/local-setup"
+        className="btn-primary mx-auto mt-6 w-fit"
+      >
+        Install guide →
+      </Link>
+
+      <div className="mx-auto mt-8 max-w-md border-t border-border pt-6">
+        <p className="text-xs text-fg-subtle">or run the pipeline in your browser instead</p>
+        <a
+          href={COLAB_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent-hover"
+        >
+          Open in Colab <ExternalLink className="h-3.5 w-3.5" />
+        </a>
       </div>
     </div>
   );
