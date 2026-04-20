@@ -44,6 +44,7 @@ inputs/checkpoints/
 *.mov
 !web/public/assets/demo-*.mp4
 !web/public/demos/*.mp4
+!web/public/demos/hero-*.mp4
 
 # ───── Build artifacts ─────
 notebooks/_built/
