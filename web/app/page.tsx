@@ -3,7 +3,7 @@ import { ExternalLink, Github, Terminal, Zap } from "lucide-react";
 import { siteConfig } from "@/lib/site";
 
 const COLAB_URL = `https://colab.research.google.com/github/${siteConfig.repoSlug}/blob/main/notebooks/03_full_pipeline.ipynb`;
-const HERO_VIDEO = `${siteConfig.basePath}/demos/hero-groot-mimic.mp4`;
+const HERO_VIDEO = `${siteConfig.basePath}/demos/hero-b-triple.mp4`;
 
 export default function HomePage() {
   return (
@@ -35,15 +35,15 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* Hero video */}
-          <div className="mx-auto mt-12 max-w-5xl">
+          {/* Hero video — natural aspect, compact width */}
+          <div className="mx-auto mt-10 max-w-3xl">
             <div
-              className="relative overflow-hidden rounded-2xl border border-border bg-black shadow-2xl
+              className="relative overflow-hidden rounded-2xl border border-border bg-black shadow-xl
                          ring-1 ring-accent/10"
             >
               <video
                 src={HERO_VIDEO}
-                className="aspect-video w-full object-contain"
+                className="block h-auto w-full"
                 autoPlay
                 loop
                 muted
@@ -51,15 +51,13 @@ export default function HomePage() {
                 preload="metadata"
               />
               <div
-                className="pointer-events-none absolute inset-x-0 bottom-0 h-20
-                           bg-gradient-to-t from-black/60 to-transparent"
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-14
+                           bg-gradient-to-t from-black/70 to-transparent"
                 aria-hidden
               />
-              <div className="pointer-events-none absolute bottom-3 left-4 right-4 flex items-end justify-between">
-                <p className="font-mono text-xs uppercase tracking-wider text-white/80">
-                  MuJoCo · Unitree G1 · GR00T WBC · tracked reference from GVHMR
-                </p>
-              </div>
+              <p className="pointer-events-none absolute bottom-2 left-3 right-3 font-mono text-[10px] uppercase tracking-wider text-white/80">
+                source · SMPL mesh · Unitree G1
+              </p>
             </div>
           </div>
         </div>
