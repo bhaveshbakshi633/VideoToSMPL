@@ -174,13 +174,24 @@ TS=$(date -u +%Y%m%dT%H%M%SZ)
 [[ -z "$OUT" ]] && OUT="$REPO_DIR/logs/groot_mimic_${STEM}_${TS}.mp4"
 mkdir -p "$(dirname "$OUT")"
 
-# bring window on top + grab its exact geometry
+# bring window on top, move + resize, then grab full geometry
 DISPLAY=$DISPLAY_ID xdotool windowactivate "$WIN_ID" 2>/dev/null || true
+DISPLAY=$DISPLAY_ID xdotool windowmove     "$WIN_ID" 100 80 2>/dev/null || true
+DISPLAY=$DISPLAY_ID xdotool windowsize     "$WIN_ID" 1280 720 2>/dev/null || true
 DISPLAY=$DISPLAY_ID xdotool windowraise    "$WIN_ID" 2>/dev/null || true
-sleep 1
+sleep 2
+
 GEO_RAW="$(DISPLAY=$DISPLAY_ID xdotool getwindowgeometry --shell "$WIN_ID")"
-eval "$GEO_RAW"     # sets WIDTH/HEIGHT/X/Y
+eval "$GEO_RAW"
 W=${WIDTH}; H=${HEIGHT}; PX=${X}; PY=${Y}
+
+# Guard against unmanageable windows: if X/Y ended up negative, fall back to a
+# fixed safe viewport (1280x720 at 100,80 — matches the resize above).
+if [[ $PX -lt 0 || $PY -lt 0 || $W -lt 200 || $H -lt 200 ]]; then
+  warn "Window geometry suspicious (${W}x${H} at ${PX},${PY}); using fallback 1280x720 @ 100,80"
+  W=1280; H=720; PX=100; PY=80
+fi
+
 # ffmpeg x11grab requires even dimensions
 W=$(( W - W % 2 )); H=$(( H - H % 2 ))
 
